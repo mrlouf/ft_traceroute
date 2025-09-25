@@ -39,16 +39,16 @@ INCLUDES	= -I./
 all: $(NAME)
 
 $(NAME): $(OBJS) $(HEADER) $(SRCS) $(MAKE)
-	ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 	
 %.o: %.c $(HEADER) $(MAKE)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	
 clean:
-	/bin/rm -f $(OBJS)
+	@/bin/rm -f $(OBJS)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 
 re: fclean all
 

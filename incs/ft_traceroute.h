@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/23 18:17:42 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:34:42 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // Macros
 # define EXIT_USAGE 64
+# define EXIT_NOROOT 77
 
 # define HELP_MSG "Usage: ft_traceroute [OPTION...] HOST\n\
 Print the route packets trace to network host.\n\
@@ -41,12 +42,38 @@ Print the route packets trace to network host.\n\
             [--help] [--usage] [--version] HOST\n"
 
 // Headers
-# include <stdlib.h>
-# include <stdio.h>
+# include <stdlib.h>		  // For EXIT_SUCCESS / EXIT_FAILURE
+# include <stdio.h>       // For printf functions
+# include <stdint.h>		  // For uint8_t
+# include <errno.h>
+
+# include <sys/types.h>   // For network addresses
+# include <sys/socket.h>
+# include <netdb.h>
+# include <arpa/inet.h>
 
 # include "../libft/libft.h"
 
+// Structure
+
+typedef struct s_traceroute
+{
+	char				*target;
+	char                *ip;
+	struct sockaddr_in	addr;
+	char				*fqdn;
+	
+	int					socket;
+	int					ident;
+	uint8_t				ttl;
+}	t_traceroute;
+
 // Prototypes
 void	parse_arg(char *arg);
+void	initialise_data(char *arg, t_traceroute *t);
+void 	resolve_hostname(t_traceroute *t);
+void	resolve_fqdn(t_traceroute *t);
+void    open_socket(t_traceroute *t);
+void    start_traceroute(t_traceroute *t);
 
 #endif
