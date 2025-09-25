@@ -1,4 +1,6 @@
 ft_traceroute
+.dep
+.obj
 
 # Prerequisites
 *.d

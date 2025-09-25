@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/25 16:34:42 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:48:28 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ Print the route packets trace to network host.\n\
             [--help] [--usage] [--version] HOST\n"
 
 // Headers
-# include <stdlib.h>		  // For EXIT_SUCCESS / EXIT_FAILURE
-# include <stdio.h>       // For printf functions
-# include <stdint.h>		  // For uint8_t
+# include <stdlib.h>		// For EXIT_SUCCESS / EXIT_FAILURE
+# include <stdio.h>			// For printf functions
+# include <stdint.h>		// For uint8_t
 # include <errno.h>
+# include <signal.h>
 
-# include <sys/types.h>   // For network addresses
+# include <sys/types.h>		// For network addresses
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
