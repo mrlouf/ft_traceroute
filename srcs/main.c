@@ -6,13 +6,14 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:03:01 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/25 16:47:31 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/26 11:55:26 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_traceroute.h"
 
-static int g_sigint;
+// Global variable
+int g_sigint = 0;
 
 static void	usage_error(void)
 {

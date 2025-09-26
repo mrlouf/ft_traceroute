@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:39:47 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/25 17:09:29 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:04:54 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ void    initialise_data(char *av, t_traceroute *t)
 	t->socket = -1;
 	t->ident = -1;
 	t->current_hop = 1;
-	t->max_hop = 64;
+	t->max_hop = 64;		// Default max hops
+	t->packet_size = 60;	// Default packet size
+	t->tries = 3;			// Default number of tries per hop
 
     resolve_hostname(t);
     resolve_fqdn(t);

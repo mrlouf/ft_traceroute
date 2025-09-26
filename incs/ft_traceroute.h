@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/25 16:48:28 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/26 11:56:15 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,14 @@ typedef struct s_traceroute
 	
 	int					socket;
 	int					ident;
-	uint8_t				ttl;
+	uint8_t				current_hop;
+	uint8_t				max_hop;
+	uint8_t				tries;
+	uint16_t			packet_size;
 }	t_traceroute;
+
+// Global variable
+extern int g_sigint;
 
 // Prototypes
 void	parse_arg(char *arg);

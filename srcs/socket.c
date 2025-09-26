@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:13:06 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/25 16:22:28 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/26 11:45:00 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ void    open_socket(t_traceroute *t)
         exit(EXIT_FAILURE);
     }
 
-/*     if (setsockopt(g_ping.ping_socket, IPPROTO_IP, IP_TTL,
-                   &g_ping.ping_ttl, sizeof(g_ping.ping_ttl)) != 0) {
+    if (setsockopt(t->socket, IPPROTO_IP, IP_TTL,
+                   &t->current_hop, sizeof(t->current_hop)) != 0) {
         fprintf(stderr, "Error setting socket options: %s\n", strerror(errno));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     struct timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 100000;
-    if (setsockopt(g_ping.ping_socket, SOL_SOCKET, SO_RCVTIMEO,
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
+    if (setsockopt(t->socket, SOL_SOCKET, SO_RCVTIMEO,
                    &timeout, sizeof(timeout)) != 0) {
         fprintf(stderr, "Error setting socket options: %s\n", strerror(errno));
-        exit(1);
-    } */
+        exit(EXIT_FAILURE);
+    }
 }
