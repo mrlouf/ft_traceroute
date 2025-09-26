@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/26 11:56:15 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:39:26 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ Print the route packets trace to network host.\n\
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
+# include <netinet/ip_icmp.h>	// For ICMP headers
 
 # include "../libft/libft.h"
 
@@ -66,6 +67,7 @@ typedef struct s_traceroute
 	
 	int					socket;
 	int					ident;
+	int					seq;
 	uint8_t				current_hop;
 	uint8_t				max_hop;
 	uint8_t				tries;
