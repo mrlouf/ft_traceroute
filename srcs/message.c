@@ -6,13 +6,13 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 15:27:36 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 16:01:39 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:30:35 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_traceroute.h"
 
-void	print_intermediate(t_traceroute *t, char *addr_str)
+void	print_message(t_traceroute *t, char *addr_str)
 {
 	struct timeval	tv;
 	float			time_ms;
@@ -21,7 +21,8 @@ void	print_intermediate(t_traceroute *t, char *addr_str)
 		printf(" %s", addr_str);
 	}
 	if (gettimeofday(&tv, NULL) == -1) {
-		
+		perror("gettimeofday");
+		exit(EXIT_FAILURE);
 	}
 	tv.tv_sec = tv.tv_sec - t->seconds;
 	tv.tv_usec = tv.tv_usec - t->microseconds;

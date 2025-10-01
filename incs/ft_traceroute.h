@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 16:01:05 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:31:02 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ typedef struct s_traceroute
 extern int g_sigint;
 
 // Prototypes
-void    parse_arg(char *arg);
+void	parse_arg(char *arg);
 void	initialise_data(char *arg, t_traceroute *t);
-void    resolve_hostname(t_traceroute *t);
+void	resolve_hostname(t_traceroute *t);
 void	resolve_fqdn(t_traceroute *t);
-void    open_socket(t_traceroute *t);
-void    start_traceroute(t_traceroute *t);
-void    print_intermediate(t_traceroute *t, char *addr_str);
+void	open_socket(t_traceroute *t);
+void	start_traceroute(t_traceroute *t);
+void	print_message(t_traceroute *t, char *addr_str);
 
 #endif

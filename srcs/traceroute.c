@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 16:05:02 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:30:29 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,17 @@ void	receive_packet(t_traceroute *t)
 	{
 		char addr_str[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
-		print_intermediate(t, addr_str);
+		print_message(t, addr_str);
 	}
 	else if (icmp_hdr->icmp_type == ICMP_ECHOREPLY)
 	{
 		char addr_str[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
-		printf(" %s\n", addr_str);
-		fflush(stdout);
-		g_sigint = 1; // Stop traceroute on echo reply
+		print_message(t, addr_str);
+
+		// Final destination reached
+		if (t->seq + 1 == t->tries)
+			g_sigint = 1;
 	}
 }
 
