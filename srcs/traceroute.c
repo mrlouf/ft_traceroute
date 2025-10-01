@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 15:41:31 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:05:02 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,17 @@ static void send_icmp_packet(t_traceroute *t)
 {
     struct icmp *icmp_hdr;
     char send_buf[t->packet_size];
-    ssize_t bytes_sent;
+	struct timeval	tv;
 
-    ft_memset(send_buf, 0, sizeof(send_buf));
-    icmp_hdr = (struct icmp *)send_buf;
+	if (gettimeofday(&tv, NULL) == -1) {
+		perror("gettimeofday");
+		exit(EXIT_FAILURE);
+	}
+	t->seconds = tv.tv_sec;
+	t->microseconds = tv.tv_usec;
+
+	ft_memset(send_buf, 0, sizeof(send_buf));
+	icmp_hdr = (struct icmp *)send_buf;
 
     icmp_hdr->icmp_type = ICMP_ECHO;
     icmp_hdr->icmp_code = 0;
@@ -44,9 +51,8 @@ static void send_icmp_packet(t_traceroute *t)
     icmp_hdr->icmp_cksum = 0;
     icmp_hdr->icmp_cksum = checksum((unsigned short *)icmp_hdr, sizeof(send_buf));
 
-    bytes_sent = sendto(t->socket, send_buf, sizeof(send_buf), 0,
-                        (struct sockaddr *)&t->addr, sizeof(t->addr));
-    if (bytes_sent < 0)
+    if (sendto(t->socket, send_buf, sizeof(send_buf), 0,
+                        (struct sockaddr *)&t->addr, sizeof(t->addr)) < 0)
     {
         perror("sendto");
         exit(EXIT_FAILURE);

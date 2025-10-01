@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 15:29:45 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:01:05 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ Print the route packets trace to network host.\n\
 # include <arpa/inet.h>
 # include <netinet/ip_icmp.h>	// For ICMP headers
 
+# include <sys/time.h>
+
 # include "../libft/libft.h"
 
 // Structure
@@ -72,6 +74,9 @@ typedef struct s_traceroute
 	uint8_t				max_hop;
 	uint8_t				tries;
 	uint16_t			packet_size;
+
+	uint64_t			seconds;
+	uint64_t			microseconds;
 }	t_traceroute;
 
 // Global variable
