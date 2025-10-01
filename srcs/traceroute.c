@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 16:30:29 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:40:22 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ static void send_icmp_packet(t_traceroute *t)
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1) {
-		perror("gettimeofday");
-		exit(EXIT_FAILURE);
+		error_exit("gettimeofday");
 	}
 	t->seconds = tv.tv_sec;
 	t->microseconds = tv.tv_usec;
@@ -54,8 +53,7 @@ static void send_icmp_packet(t_traceroute *t)
     if (sendto(t->socket, send_buf, sizeof(send_buf), 0,
                         (struct sockaddr *)&t->addr, sizeof(t->addr)) < 0)
     {
-        perror("sendto");
-        exit(EXIT_FAILURE);
+        error_exit("sendto");
     }
 }
 
@@ -74,8 +72,7 @@ void	receive_packet(t_traceroute *t)
 			printf(" *");
 			return;
 		}
-		perror("recvfrom");
-		exit(EXIT_FAILURE);
+		error_exit("recvfrom");
 	}
 
 	ip_hdr = (struct ip *)recv_buf;
@@ -107,7 +104,7 @@ void    start_traceroute(t_traceroute *t)
     while (t->current_hop <= t->max_hop && !g_sigint)
     {
         printf("%2d  ", t->current_hop);
-        fflush(stdout);
+        //fflush(stdout);
 
 		for (t->seq = 0; t->seq < t->tries; t->seq++)
 		{
@@ -116,8 +113,7 @@ void    start_traceroute(t_traceroute *t)
 			}
 			// Update the TTL for the socket
 			if (setsockopt(t->socket, IPPROTO_IP, IP_TTL, &t->current_hop, sizeof(t->current_hop)) < 0) {
-				perror("setsockopt");
-				exit(EXIT_FAILURE);
+				error_exit("setsockopt");
 			}
 			send_icmp_packet(t);
 			receive_packet(t);

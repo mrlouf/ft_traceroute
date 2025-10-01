@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   message.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 15:27:36 by nponchon          #+#    #+#             */
-/*   Updated: 2025/10/01 16:30:35 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:40:47 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	print_message(t_traceroute *t, char *addr_str)
 		printf(" %s", addr_str);
 	}
 	if (gettimeofday(&tv, NULL) == -1) {
-		perror("gettimeofday");
-		exit(EXIT_FAILURE);
+		error_exit("gettimeofday");
 	}
 	tv.tv_sec = tv.tv_sec - t->seconds;
 	tv.tv_usec = tv.tv_usec - t->microseconds;
@@ -32,4 +31,10 @@ void	print_message(t_traceroute *t, char *addr_str)
 	if (t->seq + 1 == t->tries) {
 		printf("\n");
 	}
+}
+
+void	error_exit(const char *msg)
+{
+	printf("%s: %s\n", msg, strerror(errno));
+	exit(EXIT_FAILURE);
 }
