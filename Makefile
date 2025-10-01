@@ -11,7 +11,8 @@ SRC			= 	.
 SRC			=	main.c			\
 				parse.c			\
 				socket.c		\
-				traceroute.c
+				traceroute.c	\
+				message.c
 
 SRCDIR		= srcs
 SRCS		= $(addprefix $(SRCDIR)/, $(SRC))

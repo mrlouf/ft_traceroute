@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/09/26 12:48:49 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/10/01 15:41:31 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void send_icmp_packet(t_traceroute *t)
     icmp_hdr->icmp_type = ICMP_ECHO;
     icmp_hdr->icmp_code = 0;
     icmp_hdr->icmp_id = htons(getpid() & 0xFFFF);
-    icmp_hdr->icmp_seq = htons(t->seq++);
+    icmp_hdr->icmp_seq = htons(t->seq);
     ft_memset(icmp_hdr->icmp_data, 0x42, sizeof(icmp_hdr->icmp_data)); // Fill data with arbitrary bytes
     icmp_hdr->icmp_cksum = 0;
     icmp_hdr->icmp_cksum = checksum((unsigned short *)icmp_hdr, sizeof(send_buf));
@@ -55,19 +55,13 @@ static void send_icmp_packet(t_traceroute *t)
 
 void	receive_packet(t_traceroute *t)
 {
-	char recv_buf[512];
-	struct sockaddr_in recv_addr;
-	socklen_t addr_len = sizeof(recv_addr);
-	ssize_t bytes_received;
-	struct ip *ip_hdr;
-	struct icmp *icmp_hdr;
-	struct timeval timeout = {5, 0}; // 1 second timeout
+	char 				recv_buf[512];
+	struct sockaddr_in	recv_addr;
+	socklen_t 			addr_len = sizeof(recv_addr);
+	struct ip			*ip_hdr;
+	struct icmp			*icmp_hdr;
 
-	setsockopt(t->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-
-	bytes_received = recvfrom(t->socket, recv_buf, sizeof(recv_buf), 0,
-							  (struct sockaddr *)&recv_addr, &addr_len);
-	if (bytes_received < 0)
+	if (recvfrom(t->socket, recv_buf, sizeof(recv_buf), 0, (struct sockaddr *)&recv_addr, &addr_len) < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 		{
@@ -83,27 +77,17 @@ void	receive_packet(t_traceroute *t)
 
 	if (icmp_hdr->icmp_type == ICMP_TIME_EXCEEDED)
 	{
-		struct ip *orig_ip = (struct ip *)(icmp_hdr->icmp_data);
-		struct icmp *orig_icmp = (struct icmp *)(orig_ip + (orig_ip->ip_hl << 2));
-
-		if (orig_icmp->icmp_id == htons(getpid() & 0xFFFF))
-		{
-			char addr_str[INET_ADDRSTRLEN];
-			inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
-			printf(" %s", addr_str);
-			fflush(stdout);
-		}
+		char addr_str[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
+		print_intermediate(t, addr_str);
 	}
 	else if (icmp_hdr->icmp_type == ICMP_ECHOREPLY)
 	{
-		if (icmp_hdr->icmp_id == htons(getpid() & 0xFFFF))
-		{
-			char addr_str[INET_ADDRSTRLEN];
-			inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
-			printf(" %s", addr_str);
-			fflush(stdout);
-			g_sigint = 1; // Stop traceroute on echo reply
-		}
+		char addr_str[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &recv_addr.sin_addr, addr_str, sizeof(addr_str));
+		printf(" %s\n", addr_str);
+		fflush(stdout);
+		g_sigint = 1; // Stop traceroute on echo reply
 	}
 }
 
@@ -117,23 +101,20 @@ void    start_traceroute(t_traceroute *t)
         printf("%2d  ", t->current_hop);
         fflush(stdout);
 
-		for (int i = 0; i < t->tries; i++)
+		for (t->seq = 0; t->seq < t->tries; t->seq++)
 		{
 			if (g_sigint) {
 				break;
 			}
-
-			// Set the TTL for the socket
+			// Update the TTL for the socket
 			if (setsockopt(t->socket, IPPROTO_IP, IP_TTL, &t->current_hop, sizeof(t->current_hop)) < 0) {
 				perror("setsockopt");
 				exit(EXIT_FAILURE);
 			}
-
 			send_icmp_packet(t);
 			receive_packet(t);
 		}
 
         t->current_hop++;
-        printf("\n");
     }
 }
