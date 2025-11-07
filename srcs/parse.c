@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicolas <nicolas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:39:47 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/06 10:29:52 by nicolas          ###   ########.fr       */
+/*   Updated: 2025/11/07 17:46:31 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    resolve_fqdn(t_traceroute *t)
 	char host[NI_MAXHOST];
 	if (getnameinfo((struct sockaddr *)&t->addr, sizeof(t->addr),
 					host, sizeof(host), NULL, 0, 0) == 0) {
-		t->fqdn = strdup(host);
+		t->fqdn = ft_strdup(host);
 	} else {
 		fprintf(stderr, "ft_traceroute: Could not get full hostname for IP \"%s\"\n", t->ip);
 		exit(EXIT_FAILURE);
@@ -58,7 +58,7 @@ void    initialise_data(t_traceroute *t)
 	t->packet_size = 60;	// Default packet size
 	t->tries = 3;			// Default number of tries per hop
 	t->timeout = 3;			// Default timeout in seconds
-	t->dnsresolve = 0;		// By default, do not resolve hostnames
+	t->dnsresolve = 1;		// By default, do not resolve hostnames
 
     t->seconds = 0;
     t->microseconds = 0;

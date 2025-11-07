@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicolas <nicolas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 15:27:36 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/05 17:58:46 by nicolas          ###   ########.fr       */
+/*   Updated: 2025/11/07 17:46:43 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,23 @@ void	print_hopinfo(int hop)
 		ft_putstr_fd(" ", STDOUT_FILENO);
 }
 
+char	*resolve_intermediate_hostname(char *addr_str)
+{
+	char	*hostname = NULL;
+	struct sockaddr_in sa;
+	sa.sin_family = AF_INET;
+	inet_pton(AF_INET, addr_str, &sa.sin_addr);
+
+	char host[NI_MAXHOST];
+	if (getnameinfo((struct sockaddr *)&sa, sizeof(sa),
+					host, sizeof(host), NULL, 0, 0) == 0) {
+		hostname = ft_strdup(host);
+	} else {
+		hostname = ft_strdup("Unknown");
+	}
+	return hostname;
+}
+
 void	print_message(t_traceroute *t, char *addr_str)
 {
 	struct timeval	tv;
@@ -33,6 +50,16 @@ void	print_message(t_traceroute *t, char *addr_str)
 	if (t->seq == 0) {
 		ft_putstr_fd(" ", STDOUT_FILENO);
 		ft_putstr_fd(addr_str, STDOUT_FILENO);
+
+		if (t->dnsresolve) {
+			char *resolved = resolve_intermediate_hostname(addr_str);
+			if (!resolved)
+				error_exit("strdup");
+			ft_putstr_fd(" (", STDOUT_FILENO);
+			ft_putstr_fd(resolved, STDOUT_FILENO);
+			ft_putstr_fd(")", STDOUT_FILENO);
+			free(resolved);
+		}
 	}
 	if (gettimeofday(&tv, NULL) == -1) {
 		error_exit("gettimeofday");
@@ -44,6 +71,7 @@ void	print_message(t_traceroute *t, char *addr_str)
 	char buffer[32];
 	snprintf(buffer, sizeof(buffer), "  %.3fms", time_ms);
 	ft_putstr_fd(buffer, STDOUT_FILENO);
+
 }
 
 void	error_exit(const char *msg)
