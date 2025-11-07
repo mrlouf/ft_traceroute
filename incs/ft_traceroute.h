@@ -6,7 +6,7 @@
 /*   By: nicolas <nicolas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/06 10:16:31 by nicolas          ###   ########.fr       */
+/*   Updated: 2025/11/07 16:51:15 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,10 @@ Print the route packets trace to network host.\n\
       --usage                give a short usage message\n\
   -V, --version              print program version\n"
 
-# define USAGE_MSG "Usage: ft_traceroute [-I?V] [-f NUM] [-g GATES] [-m NUM] [-M METHOD] [-p PORT]\n\
-            [-q NUM] [-t NUM] [-w NUM] [--first-hop=NUM] [--gateways=GATES]\n\
-            [--icmp] [--max-hop=NUM] [--type=METHOD] [--port=PORT]\n\
-            [--tries=NUM] [--resolve-hostnames] [--tos=NUM] [--wait=NUM]\n\
-            [--help] [--usage] [--version] HOST\n"
+# define USAGE_MSG "Usage: ft_traceroute [-f NUM] [-m NUM]\n\
+            [-q NUM] [-t NUM] [-w NUM] [--first-hop=NUM]\n\
+            [--max-hop=NUM] [--tries=NUM] [--resolve-hostnames] [--wait=NUM]\n\
+            [--help] [--usage] HOST\n"
 
 // Headers
 # include <stdlib.h>		// For EXIT_SUCCESS / EXIT_FAILURE
@@ -57,6 +56,9 @@ Print the route packets trace to network host.\n\
 # include <sys/time.h>
 
 # include "../libft/libft.h"
+
+// Bonus:
+#include <fcntl.h>    // For fcntl (non blocking sockets for wait time 0)
 
 // Structure
 

@@ -6,7 +6,7 @@
 /*   By: nicolas <nicolas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:13:06 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/06 10:30:43 by nicolas          ###   ########.fr       */
+/*   Updated: 2025/11/07 16:41:37 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ void    open_socket(t_traceroute *t)
     struct timeval timeout;
     timeout.tv_sec = t->timeout;
     timeout.tv_usec = 0;
-    if (setsockopt(t->socket, SOL_SOCKET, SO_RCVTIMEO,
-                   &timeout, sizeof(timeout)) != 0) {
+    if (t->timeout == 0) {
+        fcntl(t->socket, F_SETFL, O_NONBLOCK);
+    } else if (setsockopt(t->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) != 0) {
         fprintf(stderr, "Error setting socket options: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
