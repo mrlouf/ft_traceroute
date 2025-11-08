@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/07 17:29:28 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/11/08 12:55:05 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,5 @@ void    start_traceroute(t_traceroute *t)
         t->current_hop++;
     }
     free(t->fqdn);
+    close(t->socket);
 }

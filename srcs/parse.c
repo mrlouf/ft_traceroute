@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:39:47 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/07 17:46:31 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/11/08 13:24:32 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void    initialise_data(t_traceroute *t)
 	t->packet_size = 60;	// Default packet size
 	t->tries = 3;			// Default number of tries per hop
 	t->timeout = 3;			// Default timeout in seconds
-	t->dnsresolve = 1;		// By default, do not resolve hostnames
+	t->dnsresolve = 0;		// By default, do not resolve hostnames
 
     t->seconds = 0;
     t->microseconds = 0;
@@ -114,6 +114,8 @@ void    parse_args(char **arg, t_traceroute *t)
 			}
 		} else if (ft_strcmp(*arg, "--resolve-hostnames") == 0) {
 			t->dnsresolve = 1;
+			arg++;
+			continue;
 		} else {
 			// Assume the first non-option argument is the target
 			if (!t->target)
