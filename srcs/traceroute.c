@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:28:40 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/08 12:55:05 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/11/08 14:17:00 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,14 @@ void	receive_packet(t_traceroute *t)
 
 void    start_traceroute(t_traceroute *t)
 {
+    uint8_t ttl = 0;
+
     printf("traceroute to %s (%s), %d hops max\n",
            t->target, t->ip, t->max_hop);
 
     while (t->current_hop <= t->max_hop && !g_sigint)
     {
-        print_hopinfo(t->current_hop);
+        print_hopinfo(++ttl);
 
 		for (t->seq = 0; t->seq < t->tries; t->seq++)
 		{

@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:39:47 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/08 13:24:32 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/11/08 14:15:08 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,18 @@ void    parse_args(char **arg, t_traceroute *t)
 				t->timeout = ft_atoi(*arg);
 				if (t->timeout > 10) {
 					fprintf(stderr, "ft_traceroute: wait time must be between 1 and 10 seconds\n");
+					exit(EXIT_FAILURE);
+				}
+			} else {
+				fprintf(stderr, "ft_traceroute: option '%s' requires an argument\n", *(arg - 1));
+				exit(EXIT_FAILURE);
+			}
+		} else if (ft_strcmp(*arg, "-f") == 0 || ft_strcmp(*arg, "--first-hop") == 0) {
+			arg++;
+			if (*arg) {
+				t->current_hop = ft_atoi(*arg);
+				if (t->current_hop < 1) {
+					fprintf(stderr, "ft_traceroute: first hop must be between 1 and 255\n");
 					exit(EXIT_FAILURE);
 				}
 			} else {
