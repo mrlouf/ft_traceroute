@@ -6,7 +6,7 @@
 /*   By: nponchon <nponchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 17:02:45 by nponchon          #+#    #+#             */
-/*   Updated: 2025/11/07 17:26:19 by nponchon         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:47:27 by nponchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,19 @@
 # define EXIT_USAGE 64
 # define EXIT_NOROOT 77
 
-# define HELP_MSG "Usage: ft_traceroute [OPTION...] HOST\n\
+# define HELP_MSG "Usage: sudo ./ft_traceroute [OPTION...] HOST\n\
 Print the route packets trace to network host.\n\
 \n\
   -f, --first-hop=NUM        set initial hop distance, i.e., time-to-live\n\
-  -g, --gateways=GATES       list of gateways for loose source routing\n\
-  -I, --icmp                 use ICMP ECHO as probe\n\
   -m, --max-hop=NUM          set maximal hop count (default: 64)\n\
-  -M, --type=METHOD          use METHOD (`icmp' or `udp') for traceroute\n\
-                             operations, defaulting to `udp'\n\
-  -p, --port=PORT            use destination PORT port (default: 33434)\n\
   -q, --tries=NUM            send NUM probe packets per hop (default: 3)\n\
       --resolve-hostnames    resolve hostnames\n\
-  -t, --tos=NUM              set type of service (TOS) to NUM\n\
   -w, --wait=NUM             wait NUM seconds for response (default: 3)\n\
-  -?, --help                 give this help list\n\
-      --usage                give a short usage message\n\
-  -V, --version              print program version\n"
+      --help                 give this help list\n\
+      --usage                give a short usage message\n"
 
-# define USAGE_MSG "Usage: ft_traceroute [-f NUM] [-m NUM]\n\
-            [-q NUM] [-t NUM] [-w NUM] [--first-hop=NUM]\n\
-            [--max-hop=NUM] [--tries=NUM] [--resolve-hostnames] [--wait=NUM]\n\
+# define USAGE_MSG "Usage: sudo ./ft_traceroute [-f NUM] [-m NUM] [-q NUM] [-w NUM]\n\
+            [--first-hop=NUM] [--max-hop=NUM] [--tries=NUM] [--wait=NUM] [--resolve-hostnames]\n\
             [--help] [--usage] HOST\n"
 
 // Headers
@@ -48,12 +40,12 @@ Print the route packets trace to network host.\n\
 # include <signal.h>
 
 # include <sys/types.h>		// For network addresses
-# include <sys/socket.h>
-# include <netdb.h>
+# include <sys/socket.h>  // For socket functions
+# include <netdb.h>		    // For getaddrinfo
 # include <arpa/inet.h>
 # include <netinet/ip_icmp.h>	// For ICMP headers
 
-# include <sys/time.h>
+# include <sys/time.h>		// For gettimeofday
 
 # include "../libft/libft.h"
 
