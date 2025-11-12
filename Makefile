@@ -38,7 +38,7 @@ INCLUDES	= -I
 
 all: make_libft $(NAME)
 
-$(NAME): $(OBJS) $(HEADERS) $(SRCS)
+$(NAME): $(OBJS) $(HEADERS) $(SRCS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 make_libft:
